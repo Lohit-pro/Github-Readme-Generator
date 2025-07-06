@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchRepoData } from "../utils/fetchRepoData";
 import { FaGithub, FaEdit, FaSave, FaTimes } from "react-icons/fa"; // Import new icons
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface RepoInputProps {
   onGenerate: (
@@ -44,6 +44,12 @@ export default function RepoInput({ onGenerate }: RepoInputProps) {
   const [originalContent, setOriginalContent] = useState<string>("");
   const [readmeGenerated, setReadmeGenerated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+  if (repoUrl.trim()) {
+    onGenerate(repoUrl, sections, customContent);
+  }
+}, [sections]);
 
   const handleToggle = (section: string) => {
     setSections((prev) => ({ ...prev, [section]: !prev[section] }));
