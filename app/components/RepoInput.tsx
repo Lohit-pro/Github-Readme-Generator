@@ -44,15 +44,24 @@ export default function RepoInput({ onGenerate }: RepoInputProps) {
   const [originalContent, setOriginalContent] = useState<string>("");
   const [readmeGenerated, setReadmeGenerated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isToggled, setIsToggled] = useState(false);
 
-  useEffect(() => {
-  if (repoUrl.trim()) {
-    onGenerate(repoUrl, sections, customContent);
-  }
-}, [sections]);
+    useEffect(() => {
+      
+    const shouldAutoGenerate = repoUrl.trim() && 
+      readmeGenerated &&
+      !isLoading &&
+      !editingSection;
+
+    if (shouldAutoGenerate) {
+      console.log("onGenerate Triggered")
+      onGenerate(repoUrl, sections, customContent);
+    }
+  }, [isToggled, onGenerate, repoUrl, sections, customContent, readmeGenerated, isLoading, editingSection]);
 
   const handleToggle = (section: string) => {
     setSections((prev) => ({ ...prev, [section]: !prev[section] }));
+    setIsToggled((prev) => !(prev));
   };
 
   const handleEdit = (section: string) => {
